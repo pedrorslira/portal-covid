@@ -1,9 +1,5 @@
-import React from 'react';
+import React from "react";
 
 export default function index() {
-  return (
-    <div>
-      Agendamento
-    </div>
-  );
+  return <div>Agendamento</div>;
 }

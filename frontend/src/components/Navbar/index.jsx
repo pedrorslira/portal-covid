@@ -1,11 +1,12 @@
-import React from 'react';
-import { Navbar, Nav } from 'react-bootstrap';
+import React from "react";
+import { Navbar, Nav } from "react-bootstrap";
+import DarkModeToggle from "../DarkModeToggle";
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-export default function Header({ title = 'Vacina Covid', routes = [] }) {
+export default function Header({ title = "Vacina Covid", routes = [] }) {
   return (
-    <Navbar bg="primary" variant="dark" expand="lg">
+    <Navbar bg="dark" variant="dark" expand="lg">
       <Navbar.Brand href="/">{title}</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
@@ -19,6 +20,7 @@ export default function Header({ title = 'Vacina Covid', routes = [] }) {
             ))}
         </Nav>
       </Navbar.Collapse>
+      <DarkModeToggle />
     </Navbar>
   );
 }

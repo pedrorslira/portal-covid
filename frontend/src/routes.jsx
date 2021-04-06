@@ -1,30 +1,28 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Agendamento from './pages/Agendamento';
-import Consulta from './pages/Consulta';
-
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Agendamento from "./pages/Agendamento";
+import Consulta from "./pages/Consulta";
 
 const routes = [
   {
     component: Home,
-    name: 'Home',
-    path: '/',
-    visible:  false,
+    name: "Home",
+    path: "/",
+    visible: false,
   },
   {
     component: Agendamento,
-    name: 'Agendamento',
-    path: '/agendamento',
+    name: "Agendamento",
+    path: "/agendamento",
   },
   {
     component: Consulta,
-    name: 'Consulta',
-    path: '/consulta',
+    name: "Consulta",
+    path: "/consulta",
   },
-  
 ];
 
 const Routes = () => (
