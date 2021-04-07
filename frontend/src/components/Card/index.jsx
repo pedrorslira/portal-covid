@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 
 export default function index({ title, children }) {
   return (
-    <Card bg="info">
+    <Card bg="info" text = "light">
       <Card.Header>
         <Card.Title>{title}</Card.Title>
       </Card.Header>
