@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Card from "../../components/Card";
 import DatePickerField from "../../components/DatePickerField";
-import TimePicker from "react-bootstrap-time-picker";
+import TimePickerField from "../../components/TimePickerField";
 import { Button, Form, Col } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -18,16 +18,25 @@ const validationSchema = yup.object({
     .required("Data de nascimento é um campo obrigatório."),
   schedulingDate: yup
     .string()
-    .required("Data de agendamento é um campo obrigatório."),
+    .required("Data do agendamento é um campo obrigatório."),
+  schedulingTime: yup
+    .string()
+    .required("Horário do agendamento é um campo obrigatório."),
 });
 
 const formInitialValues = {
   name: "",
   birthDate: "",
   schedulingDate: "",
+  schedulingTime: "",
 };
 
-function index() {
+const onSubmit = (event, values) => {
+  event.preventDefault();
+  console.log(values);
+};
+
+export default function index() {
   const [startTime, setStartTime] = useState(null);
 
   return (
@@ -37,12 +46,12 @@ function index() {
           initialValues={formInitialValues}
           validationSchema={validationSchema}
         >
-          {({ handleChange, handleBlur, handleSubmit, touched, errors }) => {
+          {({ handleChange, handleBlur, errors, values }) => {
             return (
               <>
                 <Form>
                   <Form.Group>
-                  <p>Nome</p>
+                    <p>Nome</p>
                     <Col xs={2}>
                       <Form.Control
                         name="name"
@@ -75,19 +84,15 @@ function index() {
                     <div style={{ color: "red" }}>{errors.schedulingDate}</div>
                   )}
                   <p className="mt-2">Horário do Agendamento</p>
-                  <Col xs={1}>
-                    <TimePicker
-                      start="09:00"
-                      end="18:00"
-                      step={30}
-                      value={startTime}
-                      onChange={setStartTime}
-                    />
-                  </Col>
+                  <TimePickerField name="schedulingTime" onBlur={handleBlur} />
+                  {errors.name && (
+                    <div style={{ color: "red" }}>{errors.schedulingTime}</div>
+                  )}
+                  <br />
                   <Button
                     className="mt-3 ml-3"
                     type="submit"
-                    onClick={() => handleSubmit()}
+                    onClick={(event) => onSubmit(event, values)}
                   >
                     Concluir Agendamento
                   </Button>
@@ -100,5 +105,3 @@ function index() {
     </div>
   );
 }
-
-export default index;
