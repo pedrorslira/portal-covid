@@ -36,9 +36,14 @@ const onSubmit = (event, values) => {
   console.log(values);
 };
 
-export default function index() {
-  const [startTime, setStartTime] = useState(null);
+const isFormikValid = (values) => {
+  if(values.name != "" && values.birthDate != "" && values.schedulingDate != "" && values.schedulingTime != ""){
+    return true;
+  }
+  return false;
+}
 
+export default function index() {
   return (
     <div>
       <Card title="Agendamento">
@@ -93,6 +98,7 @@ export default function index() {
                     className="mt-3 ml-3"
                     type="submit"
                     onClick={(event) => onSubmit(event, values)}
+                    disabled={!isFormikValid(values)}
                   >
                     Concluir Agendamento
                   </Button>
