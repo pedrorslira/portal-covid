@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Card from "../../components/Card";
-import DatePicker from "react-datepicker";
+import DatePickerField from "../../components/DatePickerField";
 import TimePicker from "react-bootstrap-time-picker";
 import { Button, Form, Col } from "react-bootstrap";
 import { Formik } from "formik";
@@ -15,17 +15,19 @@ const validationSchema = yup.object({
     .max(70, "Limite de caracteres atingido."),
   birthDate: yup
     .string()
-    .required("Data de nascimento é um campo obrigatório")
+    .required("Data de nascimento é um campo obrigatório."),
+  schedulingDate: yup
+    .string()
+    .required("Data de agendamento é um campo obrigatório."),
 });
 
 const formInitialValues = {
   name: "",
   birthDate: "",
+  schedulingDate: "",
 };
 
 function index() {
-  const [startBirthDate, setStartBirthDate] = useState(null);
-  const [startDate, setStartDate] = useState(null);
   const [startTime, setStartTime] = useState(null);
 
   return (
@@ -40,42 +42,38 @@ function index() {
               <>
                 <Form>
                   <Form.Group>
-                    <Form.Label>Nome</Form.Label>
+                  <p>Nome</p>
                     <Col xs={2}>
                       <Form.Control
                         name="name"
                         type="text"
+                        size="sm"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        isInvalid={touched.name && errors.name}
                       />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.name}
-                      </Form.Control.Feedback>
+                      {errors.name && (
+                        <div style={{ color: "red" }}>{errors.name}</div>
+                      )}
                     </Col>
                   </Form.Group>
                   <p>Data de Nascimento</p>
-                  <DatePicker
-                    className="ml-3"
-                    selected={startBirthDate}
-                    onChange={(date) => setStartBirthDate(date)}
-                    maxDate={new Date()}
-                    dateFormat="dd/MM/yyyy"
-                    isClearable
-                    showYearDropdown
-                    scrollableMonthYearDropdown
+                  <DatePickerField
+                    name="birthDate"
+                    isMax={true}
+                    onBlur={handleBlur}
                   />
+                  {errors.birthDate && (
+                    <div style={{ color: "red" }}>{errors.birthDate}</div>
+                  )}
                   <p className="mt-2">Data do Agendamento</p>
-                  <DatePicker
-                    className="ml-3"
-                    selected={startDate}
-                    onChange={(date) => setStartDate(date)}
-                    minDate={new Date()}
-                    dateFormat="dd/MM/yyyy"
-                    isClearable
-                    showYearDropdown
-                    scrollableMonthYearDropdown
+                  <DatePickerField
+                    name="schedulingDate"
+                    isMax={false}
+                    onBlur={handleBlur}
                   />
+                  {errors.schedulingDate && (
+                    <div style={{ color: "red" }}>{errors.schedulingDate}</div>
+                  )}
                   <p className="mt-2">Horário do Agendamento</p>
                   <Col xs={1}>
                     <TimePicker
