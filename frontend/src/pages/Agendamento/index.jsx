@@ -38,7 +38,7 @@ const onSubmit = async (event, values) => {
   console.log(values);
   try {
     await axios.post("/scheduling", values);
-    toast.sucess("Agendamento feito com sucesso.");
+    toast.success("Agendamento feito com sucesso.");
   } catch (e) {
     toast.error("Ocorreu um erro desconhecido.");
   }
