@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import Card from "../../components/Card";
 import DatePickerField from "../../components/DatePickerField";
 import TimePickerField from "../../components/TimePickerField";
 import { Button, Form, Col } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { toast } from "react-toastify";
+import axios from "../../utils/api";
 
 const validationSchema = yup.object({
   name: yup
@@ -31,17 +33,28 @@ const formInitialValues = {
   schedulingTime: "",
 };
 
-const onSubmit = (event, values) => {
+const onSubmit = async (event, values) => {
   event.preventDefault();
   console.log(values);
+  try {
+    await axios.post("/scheduling", values);
+    toast.sucess("Agendamento feito com sucesso.");
+  } catch (e) {
+    toast.error("Ocorreu um erro desconhecido.");
+  }
 };
 
 const isFormikValid = (values) => {
-  if(values.name != "" && values.birthDate != "" && values.schedulingDate != "" && values.schedulingTime != ""){
+  if (
+    values.name != "" &&
+    values.birthDate != "" &&
+    values.schedulingDate != "" &&
+    values.schedulingTime != ""
+  ) {
     return true;
   }
   return false;
-}
+};
 
 export default function index() {
   return (
@@ -90,7 +103,7 @@ export default function index() {
                   )}
                   <p className="mt-2">Horário do Agendamento</p>
                   <TimePickerField name="schedulingTime" onBlur={handleBlur} />
-                  {errors.name && (
+                  {errors.schedulingTime && (
                     <div style={{ color: "red" }}>{errors.schedulingTime}</div>
                   )}
                   <br />
