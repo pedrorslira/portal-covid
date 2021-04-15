@@ -35,13 +35,36 @@ const formInitialValues = {
 
 const onSubmit = async (event, values) => {
   event.preventDefault();
-  console.log(values);
-  try {
-    await axios.post("/scheduling", values);
-    toast.success("Agendamento feito com sucesso.");
-  } catch (e) {
-    toast.error("Ocorreu um erro desconhecido.");
+  const schedulingTime = values.schedulingTime;
+  values.schedulingTime = values.schedulingTime
+    .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+    .split(" ")[1]
+    .split(":")
+    .slice(0, -1)
+    .join(":");
+  const response = await axios.get(
+    `/scheduling/${values.schedulingDate}/${values.schedulingTime}`
+  );
+  const { data } = response.data;
+  if (data >= 2) {
+    toast.error("Já existem 2 agendamentos marcados nesse horário.");
+  } else {
+    const response = await axios.get(
+      `/scheduling/date/${values.schedulingDate}`
+    );
+    const { data } = response.data;
+    if (data >= 20) {
+      toast.error("Limite de 20 agendamentos no dia alcançado.");
+    } else {
+      try {
+        await axios.post("/scheduling", values);
+        toast.success("Agendamento feito com sucesso.");
+      } catch (e) {
+        toast.error("Ocorreu um erro desconhecido.");
+      }
+    }
   }
+  values.schedulingTime = schedulingTime;
 };
 
 const isFormikValid = (values) => {
@@ -56,7 +79,7 @@ const isFormikValid = (values) => {
   return false;
 };
 
-export default function index() {
+export default function index({ history }) {
   return (
     <div>
       <Card title="Agendamento">
