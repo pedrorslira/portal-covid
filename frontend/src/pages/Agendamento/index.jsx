@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Card from "../../components/Card";
 import DatePickerField from "../../components/DatePickerField";
 import TimePickerField from "../../components/TimePickerField";
@@ -7,6 +7,14 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { toast } from "react-toastify";
 import axios from "../../utils/api";
+import moment from "moment";
+import { Persist } from "formik-persist";
+import { parseISO } from "date-fns";
+import debounce from "lodash.debounce";
+import { values } from "lodash";
+import { PersistFormikValues } from "formik-persist-values";
+
+export default function Scheduling() {
 
 const validationSchema = yup.object({
   name: yup
@@ -35,15 +43,10 @@ const formInitialValues = {
 
 const onSubmit = async (event, values) => {
   event.preventDefault();
-  const schedulingTime = values.schedulingTime;
-  values.schedulingTime = values.schedulingTime
-    .toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-    .split(" ")[1]
-    .split(":")
-    .slice(0, -1)
-    .join(":");
   const response = await axios.get(
-    `/scheduling/${values.schedulingDate}/${values.schedulingTime}`
+    `/scheduling/${moment(values.schedulingDate).toISOString()}/${moment(
+      values.schedulingTime
+    ).toISOString()}`
   );
   const { data } = response.data;
   if (data >= 2) {
@@ -64,7 +67,6 @@ const onSubmit = async (event, values) => {
       }
     }
   }
-  values.schedulingTime = schedulingTime;
 };
 
 const isFormikValid = (values) => {
@@ -79,15 +81,26 @@ const isFormikValid = (values) => {
   return false;
 };
 
-export default function index({ history }) {
   return (
     <div>
       <Card title="Agendamento">
         <Formik
           initialValues={formInitialValues}
+          enableReinitialize
           validationSchema={validationSchema}
         >
           {({ handleChange, handleBlur, errors, values }) => {
+            /*useEffect(() => {
+              const data = localStorage.getItem("formik-form");
+              if (data) {
+                values = JSON.parse(data);
+                console.log(values);
+              }
+            }, []);
+
+            useEffect(() => {
+              localStorage.setItem("formik-form", JSON.stringify(values));
+            }, [values]); */
             return (
               <>
                 <Form>
@@ -147,3 +160,4 @@ export default function index({ history }) {
     </div>
   );
 }
+

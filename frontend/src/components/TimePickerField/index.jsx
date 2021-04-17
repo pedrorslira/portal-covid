@@ -11,6 +11,7 @@ export default function index({ name, onBlur }) {
   return (
     <DatePicker
       className="ml-3"
+      type = "date"
       selected={field.value}
       onChange={(value) => formik.setFieldValue(name, value)}
       showTimeSelect
