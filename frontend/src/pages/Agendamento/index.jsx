@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Card from "../../components/Card";
 import DatePickerField from "../../components/DatePickerField";
 import TimePickerField from "../../components/TimePickerField";
@@ -8,78 +8,72 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import axios from "../../utils/api";
 import moment from "moment";
-import { Persist } from "formik-persist";
-import { parseISO } from "date-fns";
-import debounce from "lodash.debounce";
-import { values } from "lodash";
-import { PersistFormikValues } from "formik-persist-values";
 
 export default function Scheduling() {
+  const validationSchema = yup.object({
+    name: yup
+      .string()
+      .matches(/^[A-Za-z ]*$/, "Por favor, informe um nome válido.")
+      .required("Nome é um campo obrigatório.")
+      .min(3, "Um nome deve ter mais do que 2 caracteres.")
+      .max(70, "Limite de caracteres atingido."),
+    birthDate: yup
+      .string()
+      .required("Data de nascimento é um campo obrigatório."),
+    schedulingDate: yup
+      .string()
+      .required("Data do agendamento é um campo obrigatório."),
+    schedulingTime: yup
+      .string()
+      .required("Horário do agendamento é um campo obrigatório."),
+  });
 
-const validationSchema = yup.object({
-  name: yup
-    .string()
-    .matches(/^[A-Za-z ]*$/, "Por favor, informe um nome válido.")
-    .required("Nome é um campo obrigatório.")
-    .min(3, "Um nome deve ter mais do que 2 caracteres.")
-    .max(70, "Limite de caracteres atingido."),
-  birthDate: yup
-    .string()
-    .required("Data de nascimento é um campo obrigatório."),
-  schedulingDate: yup
-    .string()
-    .required("Data do agendamento é um campo obrigatório."),
-  schedulingTime: yup
-    .string()
-    .required("Horário do agendamento é um campo obrigatório."),
-});
+  const formInitialValues = {
+    name: "",
+    birthDate: "",
+    schedulingDate: "",
+    schedulingTime: "",
+  };
 
-const formInitialValues = {
-  name: "",
-  birthDate: "",
-  schedulingDate: "",
-  schedulingTime: "",
-};
-
-const onSubmit = async (event, values) => {
-  event.preventDefault();
-  const response = await axios.get(
-    `/scheduling/${moment(values.schedulingDate).toISOString()}/${moment(
-      values.schedulingTime
-    ).toISOString()}`
-  );
-  const { data } = response.data;
-  if (data >= 2) {
-    toast.error("Já existem 2 agendamentos marcados nesse horário.");
-  } else {
+  const onSubmit = async (event, values) => {
+    event.preventDefault();
     const response = await axios.get(
-      `/scheduling/date/${values.schedulingDate}`
+      `/scheduling/${moment(values.schedulingDate).toISOString()}/${moment(
+        values.schedulingTime
+      ).toISOString()}`
     );
     const { data } = response.data;
-    if (data >= 20) {
-      toast.error("Limite de 20 agendamentos no dia alcançado.");
+    if (data >= 2) {
+      toast.error("Já existem 2 agendamentos marcados nesse horário.");
     } else {
-      try {
-        await axios.post("/scheduling", values);
-        toast.success("Agendamento feito com sucesso.");
-      } catch (e) {
-        toast.error("Ocorreu um erro desconhecido.");
+      const response = await axios.get(
+        `/scheduling/date/${values.schedulingDate}`
+      );
+      const { data } = response.data;
+      if (data >= 20) {
+        toast.error("Limite de 20 agendamentos no dia alcançado.");
+      } else {
+        try {
+          await axios.post("/scheduling", values);
+          toast.success("Agendamento feito com sucesso.");
+        } catch (e) {
+          toast.error("Ocorreu um erro desconhecido.");
+        }
       }
     }
-  }
-};
+  };
 
-const isFormikValid = (values) => {
-  if (
-    values.name != "" &&
-    values.birthDate != "" &&
-    values.schedulingDate != "" &&
-    values.schedulingTime != ""
-  ) {
-    return true;
-  }
-  return false;
-};
+  const isFormikValid = (values) => {
+    if (
+      values.name != "" &&
+      values.birthDate != "" &&
+      values.schedulingDate != "" &&
+      values.schedulingTime != ""
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   return (
     <div>
@@ -160,4 +154,3 @@ const isFormikValid = (values) => {
     </div>
   );
 }
-
