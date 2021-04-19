@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Card from "../../components/Card";
 import DatePickerField from "../../components/DatePickerField";
 import TimePickerField from "../../components/TimePickerField";
@@ -80,21 +80,10 @@ export default function Scheduling() {
       <Card title="Agendamento">
         <Formik
           initialValues={formInitialValues}
-          enableReinitialize
+          enableReinitialize={true}
           validationSchema={validationSchema}
         >
           {({ handleChange, handleBlur, errors, values }) => {
-            /*useEffect(() => {
-              const data = localStorage.getItem("formik-form");
-              if (data) {
-                values = JSON.parse(data);
-                console.log(values);
-              }
-            }, []);
-
-            useEffect(() => {
-              localStorage.setItem("formik-form", JSON.stringify(values));
-            }, [values]); */
             return (
               <>
                 <Form>
