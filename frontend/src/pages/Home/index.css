@@ -1,0 +1,22 @@
+.logo{
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 45%
+  }
+
+  .logoSmall{
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 28%
+  }
+
+  .logoSmaller{
+    position:absolute;
+    float:left;
+    left: 85%;
+    width: 15%
+  }

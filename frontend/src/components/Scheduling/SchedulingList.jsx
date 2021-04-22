@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useContext, useState } from "react";
 import { Table, Form, Button, Col } from "react-bootstrap";
 import { SchedulingContext } from "../../pages/Agendamento/SchedulingContextProvider";
 import moment from "moment";
@@ -7,7 +7,7 @@ import axios from "../../utils/api";
 
 export default function SchedulingList() {
   const [schedulings] = useContext(SchedulingContext);
-  const [status,setStatus] = useState("2");
+  const [status, setStatus] = useState("2");
 
   const sortSchedulings = () => {
     schedulings.sort(function (a, b) {
@@ -28,7 +28,7 @@ export default function SchedulingList() {
     event.preventDefault();
     scheduling.status = status;
     try {
-      await axios.put(`/scheduling/${scheduling._id}`,scheduling);
+      await axios.put(`/scheduling/${scheduling._id}`, scheduling);
       toast.success("Status do Agendamento Concluído.");
     } catch (e) {
       toast.error("Ocorreu um erro desconhecido.");
@@ -62,7 +62,9 @@ export default function SchedulingList() {
                     <Form.Control
                       as="select"
                       defaultValue={scheduling.status}
-                      onChange={(event) => {setStatus(event.target.value)}}
+                      onChange={(event) => {
+                        setStatus(event.target.value);
+                      }}
                     >
                       <option value="0">Atendido - Primeira Dose</option>
                       <option value="1">Atendido - Segunda Dose</option>
@@ -83,7 +85,7 @@ export default function SchedulingList() {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </Table>    
     </>
   );
 }

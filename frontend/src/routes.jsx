@@ -27,7 +27,7 @@ const routes = [
 
 const Routes = () => (
   <BrowserRouter>
-    <Navbar title="Vacina Covid" routes={routes} />
+    <Navbar title="Portal da Vacina" routes={routes} />
     <Switch>
       {routes.map(({ path, component }) => (
         <Route exact key={path} path={path} component={component} />

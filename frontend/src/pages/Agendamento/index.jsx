@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify";
 import axios from "../../utils/api";
 import moment from "moment";
+import logo from "../../assets/logo_portal_da_vacina.png";
 
 export default function Scheduling() {
   const validationSchema = yup.object({
@@ -140,6 +141,7 @@ export default function Scheduling() {
           }}
         </Formik>
       </Card>
+      <img src={logo} alt="Logo Portal da Vacina" className="logoSmall" />
     </div>
   );
 }
